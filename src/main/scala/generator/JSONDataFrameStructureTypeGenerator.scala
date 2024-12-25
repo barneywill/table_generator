@@ -7,7 +7,7 @@ class JSONDataFrameStructureTypeGenerator {
     val isEmptyArrayException = false
     val defaultIndent = "    "
     def generateDataFrameStructureType(json: String): String = {
-        var result = "schema = StructType(["
+        var result = "schema = StructType([\n"
         JSON.parseFull(json) match {
             case Some(map : Map[String, Any]) => {map.keySet.foreach(key => {
                 val value = map.get(key).get
@@ -18,14 +18,14 @@ class JSONDataFrameStructureTypeGenerator {
                         case value if value.getClass == Class.forName("java.lang.Double") => result += f"${defaultIndent}StructField('${key}', " + (if (isDouble(value.asInstanceOf[java.lang.Double])) "DoubleType()" else "LongType()") + ", True),\n"
                         case value if value.getClass == Class.forName("java.lang.String") => result += f"${defaultIndent}StructField('${key}', StringType(), True),\n"
                         case value if value.getClass == Class.forName("java.lang.Boolean") => result += f"${defaultIndent}StructField('${key}', BooleanType(), True),\n"
-                        case value if value.isInstanceOf[Map[String, Any]] && !value.asInstanceOf[Map[String, Any]].isEmpty => result += f"${defaultIndent}StructField('${key}', " + generateRecursive(value.asInstanceOf[Map[String, Any]], defaultIndent + defaultIndent) + ",\n"
-                        case value if value.isInstanceOf[Seq[Any]] => if (value.asInstanceOf[Seq[Any]].isEmpty) {if (isEmptyArrayException) throw new RuntimeException("array with key is empty : " + key)} else result += f"${defaultIndent}StructField('${key}',  ArrayType(" + generateRecursive(value.asInstanceOf[Seq[Any]].head, defaultIndent + defaultIndent) + "),\n"
+                        case value if value.isInstanceOf[Map[String, Any]] && !value.asInstanceOf[Map[String, Any]].isEmpty => result += f"${defaultIndent}StructField('${key}', " + generateRecursive(value.asInstanceOf[Map[String, Any]], defaultIndent + defaultIndent) + f"\n${defaultIndent}),\n"
+                        case value if value.isInstanceOf[Seq[Any]] => if (value.asInstanceOf[Seq[Any]].isEmpty) {if (isEmptyArrayException) throw new RuntimeException("array with key is empty : " + key)} else result += f"${defaultIndent}StructField('${key}',  ArrayType(" + generateRecursive(value.asInstanceOf[Seq[Any]].head, defaultIndent + defaultIndent) + f"\n${defaultIndent}),\n"
                     }
                 }
             })}
         }
-        result = result.substring(0, result.length -2) + "\n)"
-        result += "])"
+        result = result.substring(0, result.length -2)
+        result += "\n])"
         result
     }
     def generateRecursive(value : Any, indent : String) : String = {
@@ -45,12 +45,12 @@ class JSONDataFrameStructureTypeGenerator {
                         case valueTmp if valueTmp.getClass == Class.forName("java.lang.String") => result += f"${defaultIndent}${indent}StructField('${key}', StringType(), True),\n"
                         case valueTmp if valueTmp.getClass == Class.forName("java.lang.Boolean") => result += f"${defaultIndent}${indent}StructField('${key}', BooleanType(), True),\n"
                         case valueTmp if valueTmp.isInstanceOf[Map[String, Any]] && !valueTmp.asInstanceOf[Map[String, Any]].isEmpty => result += f"${defaultIndent}${indent}StructField('${key}', " + generateRecursive(valueTmp.asInstanceOf[Map[String, Any]], indent + defaultIndent) + f"${defaultIndent}${indent}),\n"
-                        case valueTmp if valueTmp.isInstanceOf[Seq[Any]] => if (valueTmp.asInstanceOf[Seq[Any]].isEmpty) {if (isEmptyArrayException) throw new RuntimeException("array with key is empty : " + key)} else result += f"${defaultIndent}${indent}StructField('${key}', ArrayType(" + generateRecursive(valueTmp.asInstanceOf[Seq[Any]].head, isNameQuoted) + f"${defaultIndent}${indent}),"
+                        case valueTmp if valueTmp.isInstanceOf[Seq[Any]] => if (valueTmp.asInstanceOf[Seq[Any]].isEmpty) {if (isEmptyArrayException) throw new RuntimeException("array with key is empty : " + key)} else result += f"${defaultIndent}${indent}StructField('${key}', ArrayType(" + generateRecursive(valueTmp.asInstanceOf[Seq[Any]].head, indent + defaultIndent) + f"${defaultIndent}${indent}),"
                         case _ => {}
                     }
                 }
             })
-            f"\n${indent}StructType([\n${result}\n${indent}])"
+            f"\n${indent}StructType([\n${result}${indent}])"
         }
         else ""
     }

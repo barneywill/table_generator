@@ -19,7 +19,7 @@ class PostgreSQLTableGenerator(postgreUrl : String, postgreUser : String, postgr
       var createDorisTableSql = String.format("create table if not exists %s.%s \n(\n", hiveDb, hiveTable)
       var columns = ""
       while (rs.next()) {
-        createHiveTableSql += String.format("%s %s comment '%s',\n", PinyinUtils.getPinYin(rs.getString(1)), convertHiveType(rs.getString(2)), rs.getString(3))
+        createHiveTableSql += String.format("%s %s comment '%s',\n", rs.getString(1), convertHiveType(rs.getString(2)), rs.getString(3))
         createDorisTableSql += String.format("%s %s comment '%s',\n", rs.getString(1), convertDorisType(rs.getString(2)), rs.getString(3))
         columns += "`" + rs.getString(1) + "`" + ","
       }
