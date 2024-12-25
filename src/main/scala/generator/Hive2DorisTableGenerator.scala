@@ -54,6 +54,7 @@ class Hive2DorisTableGenerator(hiveUrl:String, hiveUser:String) {
 }
 object Hive2DorisTableGenerator {
   def main(args: Array[String]): Unit = {
+    println("usage : generator.Hive2DorisTableGenerator hiveUrl hiveUser hiveDb hiveDb hiveTable dorisDb dorisTable")
     val hiveUrl = args(0)
     val hiveUser = args(1)
     val hiveDb = args(2)

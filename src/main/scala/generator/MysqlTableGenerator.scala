@@ -70,7 +70,7 @@ class MysqlTableGenerator(mysqlUrl : String, mysqlUser : String, mysqlPassword :
 
 object MysqlTableGenerator {
   def main(args : Array[String]) : Unit = {
-    println("usage : mysqlUrl mysqlUser mysqlPassword hiveDb mysqlDb mysqlTable timeColumn")
+    println("usage : generator.MysqlTableGenerator mysqlUrl mysqlUser mysqlPassword hiveDb mysqlDb mysqlTable timeColumn")
 
     val mysqlUrl = args.apply(0)
     val mysqlUser = args.apply(1)

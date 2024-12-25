@@ -1,7 +1,5 @@
 package generator
 
-import com.ninebot.bigdata.etl.util.PinyinUtils
-
 import java.sql.{Connection, DriverManager, ResultSet, Statement}
 
 class PostgreSQLTableGenerator(postgreUrl : String, postgreUser : String, postgrePassword : String) {
@@ -70,7 +68,7 @@ class PostgreSQLTableGenerator(postgreUrl : String, postgreUser : String, postgr
 
 object PostgreSQLTableGenerator {
   def main(args : Array[String]) : Unit = {
-//    println("usage : postgreUrl postgreUser postgrePassword hiveDb postgreDb postgreTable timeColumn")
+   println("usage : generator.PostgreSQLTableGenerator postgreUrl postgreUser postgrePassword hiveDb postgreDb postgreTable timeColumn")
 
     val postgreUrl = args.apply(0)
     val postgreUser = args.apply(1)
