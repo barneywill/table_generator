@@ -1,5 +1,5 @@
 # table_generator
-Generate create table statement, select statement, or DataFrame structure schama, get rid of the boring work.
+Generate create table statement, select statement, or DataFrame structure schama, and get rid of the boring work.
 
 ```
 #package
